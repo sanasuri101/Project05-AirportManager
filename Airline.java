@@ -1,10 +1,9 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public interface Airline extends Serializable {
-
-    //public void airlineDescription();
-
-   // public void passengerList();
-
-    String getGatetoString();
+public interface Airline extends Serializable{
+	String getName();
+	String getDescription();
+	public void addFlight(Flight flight);
+	public void deleteFlight(Flight flight);
 }

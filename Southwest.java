@@ -1,45 +1,56 @@
-import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Southwest implements Airline {
+public class Southwest implements Airline{
+	private static final String name = "Southwest";
+	private static final String description = 
+			"Southwest Airlines is proud to offer flights to Purdue University.\n"+
+			"We are happy to offer free in flight wifi, as well as our amazing snacks.\n"+
+			"In addition, we offer flights for much cheaper than other airlines,and offer\n"+
+			"two free checked bags.We hope you choose Southwest for your next flight.\n";
 
+	
+	private List<Flight> flightList; 
+	
+	public Southwest() {
+	}
 
-    private ArrayList<String> passengers;
-    private File SouthwestList;
-    private Gate gate;
+	public Southwest(List<Flight> flightList) {
+		this.flightList = flightList;
+	}
+	
+	public List<Flight> getFlightList() {
+		return flightList;
+	}
 
-    public Southwest() {
-        this.passengers = new ArrayList<>();
-
-    }
-
-    public ArrayList<String> getPassengers() {
-        return passengers;
-    }
-
-    public void addPassenger(Passenger passenger){
-        passengers.add(passenger.toString());
-    }
-
-    public String getGatetoString(){
-        return gate.toString();
-    }
-
-    /*public  void writeFile(String filename) {
-        //To Do
-        AlaskaList = new File(filename);
-        try {
-            FileOutputStream fos = new FileOutputStream(AlaskaList);
-            PrintWriter pw = new PrintWriter(fos);
-            for (int i = 0; i < passengers.size(); i++) {
-                pw.write(passengers.get(i));
-                pw.write("\n");
-            }
-            pw.close();
-        } catch (Exception e2) {
-            System.out.println(e2.getMessage());
-        }
-
-
-    }*/
+	@Override
+	public void addFlight(Flight flight)
+	{
+		if(flightList==null)
+		{
+			flightList = new ArrayList<Flight>();
+		}
+		flightList.add(flight);		
+	}
+	@Override
+	public void deleteFlight(Flight flight)
+	{
+		if(flightList!=null && flightList.size()>0)
+		{
+			flightList.remove(flight);
+		}		
+	}
+	@Override
+	public String getName() {
+		return name;
+	}	
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	
+	@Override
+	public String toString() {
+		return "Southwest [description=" + description+", flightList="+flightList+"]";
+	}	
 }

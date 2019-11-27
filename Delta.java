@@ -1,45 +1,56 @@
-import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Delta implements Airline {
+	private static final String name = "Delta";
+	private static final String description = 
+			"Delta Airlines is proud to be one of the five premier Airlines at \n"+
+			"Purdue University.We are extremely offer exceptional services, with free\n"+
+			"limited WiFi for all customers.Passengers who use T-Mobile as a cell\n"+
+			"phone carrier get additional benefits.We are also happy to power outlets\n"+
+			"in each seat for passenger use.We hope you choose to fly Delta as your next Airline.";
+	
+	private List<Flight> flightList; 
+	
+	public Delta() {
+	}
 
+	public Delta(List<Flight> flightList) {
+		this.flightList = flightList;
+	}
+	
+	public List<Flight> getFlightList() {
+		return flightList;
+	}
 
-    private ArrayList<String> passengers;
-    private File DeltaList;
-    private Gate gate;
-
-    public Delta() {
-        this.passengers = new ArrayList<>();
-
-    }
-
-    public ArrayList<String> getPassengers() {
-        return passengers;
-    }
-
-    public void addPassenger(Passenger passenger){
-        passengers.add(passenger.toString());
-    }
-
-    public String getGatetoString(){
-        return gate.toString();
-    }
-
-    /*public  void writeFile(String filename) {
-        //To Do
-        AlaskaList = new File(filename);
-        try {
-            FileOutputStream fos = new FileOutputStream(AlaskaList);
-            PrintWriter pw = new PrintWriter(fos);
-            for (int i = 0; i < passengers.size(); i++) {
-                pw.write(passengers.get(i));
-                pw.write("\n");
-            }
-            pw.close();
-        } catch (Exception e2) {
-            System.out.println(e2.getMessage());
-        }
-
-
-    }*/
+	@Override
+	public void addFlight(Flight flight)
+	{
+		if(flightList==null)
+		{
+			flightList = new ArrayList<Flight>();
+		}
+		flightList.add(flight);		
+	}
+	@Override
+	public void deleteFlight(Flight flight)
+	{
+		if(flightList!=null && flightList.size()>0)
+		{
+			flightList.remove(flight);
+		}		
+	}
+	@Override
+	public String getName() {
+		return name;
+	}	
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	
+	@Override
+	public String toString() {
+		return "Delta [description=" + description+", flightList="+flightList+"]";
+	}	
 }
