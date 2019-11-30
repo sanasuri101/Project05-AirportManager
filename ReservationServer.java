@@ -1,16 +1,15 @@
+import java.io.*;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.Set;
-import java.io.File;
-import java.io.IOException;
-import java.io.BufferedReader;
 import java.util.HashSet;
-import java.io.FileReader;
 import java.util.Objects;
 import java.net.Socket;
 
 public final class ReservationServer {
 
     private ServerSocket serverSocket;
+    private Socket clientSocket;
 
     public ReservationServer(File file) throws NullPointerException, IOException {
         BufferedReader reader;
@@ -52,6 +51,10 @@ public final class ReservationServer {
 
             //handlerThread.start();
 
+            handlerThread = new Thread(new ClientHandler(clientSocket));
+
+            handlerThread.start();
+
             System.out.printf("<Client %d connected...>%n", clientCount);
 
             clientCount++;
@@ -91,16 +94,74 @@ public final class ReservationServer {
     } //toString
 
     public static void main(String[] args) {
-        ReservationServer server;
+        ServerSocket server = null;
 
-        try {
-            server = new ReservationServer(new File("/Users/bhaviksardar/IdeaProjects/Project/project5/reservations.txt"));
+        //ReservationServer server;
+
+       /* try {
+            //server = new ReservationServer(new File("/Users/bhaviksardar/IdeaProjects/Project/reservations"));
         } catch (Exception e) {
             e.printStackTrace();
 
             return;
-        } //end try catch
+        } //end try catch*/
 
-        server.serveClients();
+        try {
+            server = new ServerSocket(3200);
+            server.setReuseAddress(true);
+            while (true){
+                Socket client = server.accept();
+
+                System.out.println("New Client Accepted " +client.getInetAddress().getHostAddress());
+
+                ClientHandler clientsock = new ClientHandler(client);
+
+                new Thread(clientsock).start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return;
+        } //end try catch*/
+
+        //server.serveClients();
     } //main
+
+    private static class ClientHandler implements Runnable {
+        Socket clientSocket;
+
+        public ClientHandler(Socket clientSocket) throws NullPointerException {
+            this.clientSocket = clientSocket;
+        } //CensoringRequestHandler
+
+        @Override
+        public void run() {
+            File f = new File("reservations.txt");
+            try {
+               // FileOutputStream fos = new FileOutputStream(f);
+                FileOutputStream fos = new FileOutputStream(f);
+                PrintWriter pw = new PrintWriter(fos);
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+                /*for (int i = 0; i < temp.size(); i++){
+                    pw.write(temp.get(i));
+                }*/
+
+                String line = in.readLine();
+                if (line != null){
+                    //System.out.printf("From Client: ", line);
+                    pw.write(line);
+                    //writer.write(line);
+                    writer.newLine();
+                    writer.flush();
+                }
+                pw.close();
+                writer.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } //run
+    }
 }
