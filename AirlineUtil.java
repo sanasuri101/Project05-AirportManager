@@ -1,9 +1,34 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
 public class AirlineUtil {
-	
+
+	private static String fileName="Reservations.txt";	
+	public static void main(String args[])
+	{
+		/*
+		Passenger p = new Passenger("Sriram","Anasuri",18);
+		Passenger p1 = null;
+		try {
+			serialize(p);
+			p1 = (Passenger)deSerialize();
+			System.out.println("After deSerialize passenger="+p1);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		String str = "*he-llo-";
+	    System.out.println(isStringOnlyAlphabetAndDash(str)); 		
+	}	
 	/**
      * Determines whether or not the specified {@code String} is parsable as a non-negative {@code int}.
      */
@@ -17,11 +42,12 @@ public class AirlineUtil {
         if(str != null && !str.isEmpty())
             return false;
         return true;
-    }     
+    }   
+    //This method used to display input dialog based on input request type for host and port
     public static DataObject showInputDialog(InputType inputType)
     {
     	Integer choice = 0;
-    	DataObject dataObject = new DataObject();
+    	DataObject dataObject = new DataObject(inputType);
     	if(inputType!=null && inputType.equals(InputType.HOST))
     	{
     		while(true)
@@ -91,7 +117,11 @@ public class AirlineUtil {
     	}
     	return dataObject;
     }
-    
+    //This method is used to check if the string contains alphabets and dash only.
+    public static boolean isStringOnlyAlphabetAndDash(String s) {
+        return (s == null) ? false : s.matches("^[a-zA-Z-]*$");
+    }
+    //To return the list of airline objects
     public static ArrayList<Airline> getAirlineList()
     {
     	ArrayList<Airline> airLineList = new ArrayList<Airline>();
@@ -100,4 +130,49 @@ public class AirlineUtil {
     	airLineList.add(new Southwest());    	
     	return airLineList;
     }
+    //This method is used to read the objects from Reservations.txt file 
+   	public static Object deSerialize() throws IOException, ClassNotFoundException 
+   	{
+		FileInputStream fileInputStream = new FileInputStream(fileName);
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+		ObjectInputStream objectInputStream = new ObjectInputStream(bufferedInputStream);
+		Object object = objectInputStream.readObject();
+		objectInputStream.close();
+		fileInputStream.close();
+		return object;
+    }
+    //This method is used to write the objects to Reservations.txt file
+   	public static synchronized void serialize(Object object) throws IOException 
+   	{
+		FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(bufferedOutputStream);
+		objectOutputStream.writeObject(object);
+		objectOutputStream.close();
+		fileOutputStream.close();
+    }   
+   	
+	//Assumptions
+	//Flight 18000 belongs to Delta, 19000 belongs to Alaska and 15000 belongs to Southwest for simplicity.
+	//The capacity of flight is assumed to be 100 by default for each airline and can be changed.  
+   	
+   	public static Flight getFlight(String airline)
+   	{
+   		Flight flight  = null;
+   		
+   		if(!isNullOrEmpty(airline) && airline.equals("Delta"))
+   		{
+   			flight  =new Flight("18000",10,"Delta");
+   		}
+   		else if(!isNullOrEmpty(airline) && airline.equals("Alaska"))
+   		{
+   			flight  =new Flight("19000",10,"Alaska");   			
+   		}
+   		else if(!isNullOrEmpty(airline) && airline.equals("Southwest"))
+   		{
+   			flight  =new Flight("15000",10,"Southwest");   			
+   		}
+   		
+   		return flight;
+   	}
 }

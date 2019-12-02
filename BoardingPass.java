@@ -1,17 +1,42 @@
-public class BoardingPass {
+import java.io.Serializable;
 
-    private Passenger passenger;
+/**
+ * The Boarding Pass is created for a specific passenger, airline, and gate. When printed, it should contain the airline’s 
+ * name, passenger’s first and last names, the passenger’s age, and the gate. 
+ */
 
-    public BoardingPass(Passenger passenger) {
-        this.passenger = passenger;
-    }
+public class BoardingPass implements Serializable {
+	Passenger passenger;
+	String airline;
+	Gate gate;
+	
+	public BoardingPass(Passenger passenger, String airline, Gate gate) {
+		this.passenger = passenger;
+		this.airline = airline;
+		this.gate = gate;
+	}
+	
+	public Passenger getPassenger() {
+		return passenger;
+	}
+	public String getAirline() {
+		return airline;
+	}
+	public Gate getGate() {
+		return gate;
+	}
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
+	}
+	public void setAirline(String airline) {
+		this.airline = airline;
+	}
+	public void setGate(Gate gate) {
+		this.gate = gate;
+	}
 
-    @Override
-    public String toString() {
-        return "BOARDING PASS FOR FLIGHT 18000 WITH " + passenger.getAirline()
-                + " Airlines\nPASSENGER FIRST NAME: " + passenger.getFirstname()
-                + "\nPASSENGER LAST NAME: " + passenger.getLastname()
-                + "\nPASSENGER AGE: " + passenger.getAge()
-                + "\nYou can now begin boarding at gate " + passenger.getAirline().getGatetoString() ;
-    }
+	@Override
+	public String toString() {
+		return "BoardingPass ["+passenger+ ", airline=" + airline + ", gate=" + gate.getGateNumber() + "]";
+	}
 }

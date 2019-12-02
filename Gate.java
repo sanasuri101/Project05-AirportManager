@@ -1,31 +1,54 @@
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public class Gate implements Serializable {
+/**
+ *A class that implements Serializable. Use it to create Gates for flights in the form of [terminal][gate] 
+ *where terminal is a letter A,B,C and gate is a random number between 1 - 18, inclusive.
+ *Note: Gates are associated with flights after the first passenger buys a ticket, and can be deleted after the flight is full.
+ */
+public class Gate implements Serializable{
+	private Terminal terminal;
+	private int gateNumber;
+	private boolean isGateOpen;
+	Flight flight;
+	int ticketCount;
+	
+	public Gate(Terminal terminal, int gateNumber,Flight flight) {
+		this.terminal = terminal;
+		this.gateNumber = gateNumber;
+		this.isGateOpen = true;
+		this.flight = flight;
+		this.ticketCount = 0;
+	}
+	
+	public Terminal getTerminal() {
+		return terminal;
+	}
 
-    private String gateLetter;
-    private String gateNumber;
+	public int getGateNumber() {
+		return gateNumber;
+	}
+	
+	public void incrementTicketCount() {
+		if(ticketCount<flight.getPassengerCount())
+			ticketCount++;
+	}
 
-    public Gate(){
-        ArrayList<String> gateletter = new ArrayList<>();
-        ArrayList<String> gatenumber = new ArrayList<>();
-        int randgateletter = (int) Math.random()*3;
+	public boolean isGateOpen() {
+		if(ticketCount == flight.getPassengerCount())
+		{
+			isGateOpen = false;
+		}
+		return isGateOpen;
+	}
 
-        for (int i = 1; i < 19; i++){
-            gatenumber.add(Integer.toString(i));
-        }
-
-        int gatenum = (int)Math.random()*(18-1)+1;
-        this.gateNumber= gatenumber.get(gatenum);
-        gatenumber.remove(gatenum);
-        gateletter.add("A");
-        gateletter.add("B");
-        gateletter.add("C");
-        this.gateLetter = gateletter.get(randgateletter);
-        gateletter.remove(randgateletter);
-    }
-
-    public String toString(){
-        return gateLetter+gateNumber;
-    }
+	public Flight getFlight() {
+		return flight;
+	}
+	
+	@Override
+	public String toString() {
+		return "Gate [terminal=" + terminal + ", gateNumber=" + gateNumber + ",ticketCount="+ticketCount+", isGateOpen=" + isGateOpen + ", airLineName="+flight.getAirLineName()+",flight=" + flight.getFlightNumber()
+				+ "]";
+	}
+	
 }

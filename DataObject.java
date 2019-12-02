@@ -4,7 +4,7 @@ public class DataObject {
 	private int port;	
 	private Integer result;
 	
-	public void DataObject(InputType inputType)
+	public DataObject(InputType inputType)
 	{
 		this.inputType = inputType;
 	}

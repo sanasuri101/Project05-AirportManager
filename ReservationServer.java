@@ -1,40 +1,33 @@
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Objects;
 import java.net.Socket;
 
+/**
+ * The server can handle multiple clients simultaneously. It will track and record ticket sales by writing to reservations.txt. 
+ * A sample reservations file can be found in the Starter Code folder. Your program will need to be able to create and write to 
+ * a file in a similar format.Example: Client 1 and Client 2 are both connected to the server and booking a Southwest flight. 
+ * If Client 1 books the last Southwest ticket, Client 2 should no longer be able to book it.
+ */
 public final class ReservationServer {
-
+    /**
+     * The server socket of this server.
+     */
     private ServerSocket serverSocket;
-    private Socket clientSocket;
+    public static ReservationModel reservationModel = new ReservationModel();    
 
-    public ReservationServer(File file) throws NullPointerException, IOException {
-        BufferedReader reader;
-        String line;
-
-        Objects.requireNonNull(file, "the specified file is null");
-
+    public ReservationServer() throws IOException {
         this.serverSocket = new ServerSocket(0);
+    } 
 
-        reader = new BufferedReader(new FileReader(file));
-
-        line = reader.readLine();
-
-        while (line != null) {
-
-            line = reader.readLine();
-        } //end while
-
-        reader.close();
-    } //CensoringServer
-
+    /**
+     * Serves the clients that connect to this server.
+     */
     public void serveClients() {
         Socket clientSocket;
+        ReservationServerClientHandler handler;
         Thread handlerThread;
-        int clientCount = 0;
+        int connectionCount = 0;
 
         System.out.printf("<Now serving clients on port %d...>%n", this.serverSocket.getLocalPort());
 
@@ -44,124 +37,38 @@ public final class ReservationServer {
             } catch (IOException e) {
                 e.printStackTrace();
 
-                return;
+                break;
             } //end try catch
 
-            //handlerThread = new Thread(new CensoringRequestHandler(clientSocket, this.badWords));
+            handler = new ReservationServerClientHandler(clientSocket);
 
-            //handlerThread.start();
-
-            handlerThread = new Thread(new ClientHandler(clientSocket));
+            handlerThread = new Thread(handler);
 
             handlerThread.start();
 
-            System.out.printf("<Client %d connected...>%n", clientCount);
+            System.out.printf("<Client %d connected...>%n", connectionCount);
 
-            clientCount++;
+            connectionCount++;
         } //end while
     } //serveClients
-
-
-    @Override
-    public int hashCode() {
-        int result = 23;
-
-        result = 31 * result + Objects.hashCode(this.serverSocket);
-
-        return result;
-    } //hashCode
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        } else if (object instanceof ReservationServer) {
-            boolean equal;
-
-            equal = Objects.equals(this.serverSocket, ((ReservationServer) object).serverSocket);
-
-            return equal;
-        } else {
-            return false;
-        } //end if
-    } //equals
-
-    @Override
-    public String toString() {
-        String format = "ReservationServer[%s]";
-
-        return String.format(format, this.serverSocket);
-    } //toString
-
+    
     public static void main(String[] args) {
-        ServerSocket server = null;
-
-        //ReservationServer server;
-
-       /* try {
-            //server = new ReservationServer(new File("/Users/bhaviksardar/IdeaProjects/Project/reservations"));
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return;
-        } //end try catch*/
+    	ReservationServer server;
 
         try {
-            server = new ServerSocket(3200);
-            server.setReuseAddress(true);
-            while (true){
-                Socket client = server.accept();
-
-                System.out.println("New Client Accepted " +client.getInetAddress().getHostAddress());
-
-                ClientHandler clientsock = new ClientHandler(client);
-
-                new Thread(clientsock).start();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return;
-        } //end try catch*/
-
-        //server.serveClients();
-    } //main
-
-    private static class ClientHandler implements Runnable {
-        Socket clientSocket;
-
-        public ClientHandler(Socket clientSocket) throws NullPointerException {
-            this.clientSocket = clientSocket;
-        } //CensoringRequestHandler
-
-        @Override
-        public void run() {
-            File f = new File("reservations.txt");
+            server = new ReservationServer();
             try {
-               // FileOutputStream fos = new FileOutputStream(f);
-                FileOutputStream fos = new FileOutputStream(f);
-                PrintWriter pw = new PrintWriter(fos);
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
-                /*for (int i = 0; i < temp.size(); i++){
-                    pw.write(temp.get(i));
-                }*/
-
-                String line = in.readLine();
-                if (line != null){
-                    //System.out.printf("From Client: ", line);
-                    pw.write(line);
-                    //writer.write(line);
-                    writer.newLine();
-                    writer.flush();
-                }
-                pw.close();
-                writer.close();
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                File file = new File("Reservations.txt");
+                if(file.exists() && file.canRead())
+                	server.reservationModel = (ReservationModel)AirlineUtil.deSerialize();
+            }catch(IOException | ClassNotFoundException e) {
             }
-        } //run
-    }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        } //end try catch
+
+        server.serveClients();
+    } //main
 }
+

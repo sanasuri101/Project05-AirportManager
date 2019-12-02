@@ -4,11 +4,18 @@ import java.util.List;
 public class Flight {
 	private String flightNumber;
 	private List<Passenger> passengerList;
+	//The capacity of flight can be assumed to be 100
 	private int capacity;
 	private boolean isFull;
 	private int passengerCount;
 	private String airLineName;
 
+	public Flight(String flightNumber,String airLineName) {
+		this.flightNumber = flightNumber;
+		this.capacity = 100;
+		this.airLineName = airLineName;
+	}
+	
 	public Flight(String flightNumber, int capacity,String airLineName) {
 		this.flightNumber = flightNumber;
 		this.capacity = capacity;
