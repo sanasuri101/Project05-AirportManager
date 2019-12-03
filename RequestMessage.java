@@ -1,59 +1,67 @@
 import java.io.Serializable;
 import java.util.UUID;
 
-public class RequestMessage implements Serializable 
-{
-	private static final long serialVersionUID = -5684318806309778028L;
-	private RequestType requestType;
-	private String message;
-	private Passenger passenger; 
-	private String airLine;
-	private UUID clientId;
-	
-	public UUID getClientId() {
-		return clientId;
-	}
+/**
+ * A handler for requests made to a countdown server.
+ *
+ * @author Sriram Anasuri sanasuri
+ * @version 11/11/19 1.0
+ */
+public class RequestMessage implements Serializable {
+    private static final long serialVersionUID = -5684318806309778028L;
+    private RequestType requestType;
+    private String message;
+    private Passenger passenger;
+    private String airLine;
+    private UUID clientId;
 
-	public void setClientId(UUID clientId) {
-		this.clientId = clientId;
-	}
+    public UUID getClientId() {
+        return clientId;
+    }
 
-	public RequestMessage(RequestType requestType) {
-		this.requestType = requestType;
-	}
-	
-	public RequestType getRequestType() {
-		return requestType;
-	}
-	public void setRequestType(RequestType requestType) {
-		this.requestType = requestType;
-	}
-	public Passenger getPassenger() {
-		return passenger;
-	}
+    public void setClientId(UUID clientId) {
+        this.clientId = clientId;
+    }
 
-	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
-	}
-	public String getMessage() {
-		return message;
-	}
+    public RequestMessage(RequestType requestType) {
+        this.requestType = requestType;
+    }
 
-	public String getAirLine() {
-		return airLine;
-	}
+    public RequestType getRequestType() {
+        return requestType;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
 
-	public void setAirLine(String airLine) {
-		this.airLine = airLine;
-	}
+    public Passenger getPassenger() {
+        return passenger;
+    }
 
-	@Override
-	public String toString() {
-		return "RequestMessage [requestType=" + requestType + ", message=" + message + ", passenger=" + passenger
-				+ ", airLine=" + airLine + ", clientId=" + clientId + "]";
-	}
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getAirLine() {
+        return airLine;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setAirLine(String airLine) {
+        this.airLine = airLine;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestMessage [requestType=" + requestType + ", message=" + message + ", passenger=" + passenger +
+                ", airLine=" + airLine + ", clientId=" + clientId + "]";
+    }
 }

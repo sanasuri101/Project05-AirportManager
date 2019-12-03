@@ -1,43 +1,48 @@
+/**
+ * A handler for requests made to a countdown server.
+ *
+ * @author Sriram Anasuri sanasuri
+ * @version 11/11/19 1.0
+ */
 public class DataObject {
-	private InputType inputType;
-	private String hostName;
-	private int port;	
-	private Integer result;
-	
-	public DataObject(InputType inputType)
-	{
-		this.inputType = inputType;
-	}
+    private InputType inputType;
+    private String hostName;
+    private int port;
+    private Integer result;
 
-	public InputType getInputType() {
-		return inputType;
-	}
+    public DataObject(InputType inputType) {
+        this.inputType = inputType;
+    }
 
-	public String getHostName() {
-		return hostName;
-	}
+    public InputType getInputType() {
+        return inputType;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public String getHostName() {
+        return hostName;
+    }
 
-	public Integer getResult() {
-		return result;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public void setInputType(InputType inputType) {
-		this.inputType = inputType;
-	}
+    public Integer getResult() {
+        return result;
+    }
 
-	public void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
+    public void setInputType(InputType inputType) {
+        this.inputType = inputType;
+    }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
 
-	public void setResult(Integer result) {
-		this.result = result;
-	}
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
 }
